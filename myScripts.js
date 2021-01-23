@@ -38,26 +38,44 @@ function addData(obj) {
 
 //double the money by clicking doubleBtn
 function doubleMoney() {
-    data = data.map((user) => {
-        return { //using the three dots copys what is in the data already (is call spread operator)
+    data = data.map((user) => { //using .map goes thru everysingle user in the arr and modifies it
+        return { //using the three dots copys what is in the data already (is call spread operator ...user)
             ...user,
             money: user.money * 2
         };
     });
     updateDOM();
 }
-//DOUBLE MONEY FUNCTION
+//sorting MONEY FUNCTION
 
 function sortByRichest() {
     data.sort((a, b) => b.money - a.money);
     updateDOM();
 }
-// update dom to add user to the document and display it 
+// update dom to add user to the document and display it/ reset clear all the displayed user and start again
+//FILTER ONLY MILLIONARES///////////////////
 
-function updateDOM(providedData = data) { // updteDom is a js preset object 
+
+function show_millionare() {
+    data = data.filter(user => user.money > 1000000);
+    updateDOM();
+}
+
+//CALCULATING THE total WEALTH ////////////
+function calculate_wealth() {
+    let wealth = data.reduce((acc, user) => (acc += user.money), 0);
+    let wealthEl = document.createElement('div');
+
+    wealthEl.innerHTML = `<h3>Total Wealth : <strong>${formatM(wealth)}</strtong></h3>`;
+    main.appendChild(wealthEl);
+}
+
+
+
+function updateDOM(providedData = data) { // providedData in this case is preset to the data arr
 
     //clear the main div
-    main.innerHTML = "<h2><strong>Person</strong>Wealth</h2>"; // this is to write on the page watch the backticks
+    main.innerHTML = "<h2><strong>Person</strong>Wealth</h2>"; // this is to write on the page 
     providedData.forEach(function (item) { //declaring the forEach loup with the perimetro item, it should habe benn people instead of item
         let element = document.createElement('div'); // create a div for the information on the page
         element.classList.add('person'); // grabbing the class person and adding it with classList
@@ -69,11 +87,13 @@ function updateDOM(providedData = data) { // updteDom is a js preset object
 // format number as dinero
 
 function formatM(number) {
-    return '$' + number.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'); //this is to concat and make it look like money qty on the page
+    return '$' + number.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'); //this is to concat and make it look like money qty 
 }
 // event listener BUTTONS 
 addUserBtn.addEventListener("click", getRandomUser); // when you press button add user it will spit out different users (this is declare above getRandomUser)
 doubleBtn.addEventListener("click", doubleMoney);
-sortBtn.addEventListener("click", sortByRichest)
+sortBtn.addEventListener("click", sortByRichest);
+millionareBtn.addEventListener("click", show_millionare);
+calculateBtn.addEventListener("click", calculate_wealth);
 
 // watch with ////punto y coma//// al final de cada linea de codigo que en VANILLAJS son muy importantes
